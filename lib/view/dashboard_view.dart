@@ -1,48 +1,61 @@
 import 'package:flutter/material.dart';
-import 'login_view.dart';
+import '../view/Bottom_Screen/about_view.dart';
+import '../view/Bottom_Screen/profile_view.dart';
+import '../view/Bottom_Screen/cart_view.dart';
+import '../view/Bottom_Screen/home_cart.dart';
 
-class DashboardView extends StatelessWidget {
+class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
+
+  @override
+  State<DashboardView> createState() => _BottomNavigationViewState();
+}
+
+class _BottomNavigationViewState extends State<DashboardView> {
+  int _selectedIndex = 0;
+
+  
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const CartView(),
+    const ProfileView(),
+    const AboutView(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dashboard"),
-        backgroundColor: Colors.redAccent,
+        title: const Text("Dashboard"),  
+        centerTitle: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Center(
-            child: Text(
-              "Welcome to Dashboard",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
+      body: _screens[_selectedIndex], 
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginView(),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            ),
-            child: const Text(
-              "Logout",
-              style: TextStyle(fontSize: 16, color: Colors.white),
-            ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.info),
+            label: 'About',
           ),
         ],
       ),
