@@ -19,7 +19,7 @@ class _SplashscreenViewState extends State<SplashscreenView>
     super.initState();
 
     animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+        AnimationController(vsync: this, duration: const Duration(seconds: 4));
 
     animation =
         CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
