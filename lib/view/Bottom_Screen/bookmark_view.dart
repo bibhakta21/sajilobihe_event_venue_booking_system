@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CartView extends StatelessWidget {
-  const CartView({super.key});
+class BookmarkView extends StatelessWidget {
+  const BookmarkView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Center(
       child: Text(
-        'Cart View',
+        'Bookmark',
         style: TextStyle(fontSize: 24),
       ),
     );

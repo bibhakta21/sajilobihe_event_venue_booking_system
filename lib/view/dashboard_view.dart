@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../view/Bottom_Screen/about_view.dart';
+
 import '../view/Bottom_Screen/profile_view.dart';
-import '../view/Bottom_Screen/cart_view.dart';
-import '../view/Bottom_Screen/home_cart.dart';
+import 'Bottom_Screen/bookmark_view.dart';
+import 'Bottom_Screen/homescreen_view.dart';
+import 'Bottom_Screen/order_view.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -14,12 +15,11 @@ class DashboardView extends StatefulWidget {
 class _BottomNavigationViewState extends State<DashboardView> {
   int _selectedIndex = 0;
 
-  
   final List<Widget> _screens = [
     const HomeScreen(),
-    const CartView(),
+    const BookmarkView(),
+    const OrderView(),
     const ProfileView(),
-    const AboutView(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,11 +31,7 @@ class _BottomNavigationViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Dashboard"),  
-        centerTitle: true,
-      ),
-      body: _screens[_selectedIndex], 
+      body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
@@ -46,16 +42,16 @@ class _BottomNavigationViewState extends State<DashboardView> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
-            label: 'Cart',
+            icon: Icon(Icons.bookmark),
+            label: 'Bookmark',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt_long_rounded),
+            label: 'Order',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.info),
-            label: 'About',
           ),
         ],
       ),
