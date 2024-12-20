@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import './login_view.dart'; // Update this import with the correct path
 
 class OnboardingScreen extends StatefulWidget {
@@ -49,6 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         actions: [
           GestureDetector(
             onTap: () {

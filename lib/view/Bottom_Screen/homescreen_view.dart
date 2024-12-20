@@ -5,59 +5,72 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        elevation: 0,
-        leading: const Icon(Icons.menu, color: Colors.white),
-        title: const Text(
-          'SajiloBihe',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.redAccent,
+          elevation: 0,
+          title: const Text(
+            'SajiloBihe',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {},
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSearchBar(),
-            _buildOfferBanner(),
-            _buildSectionTitle('Popular Venue', () {}),
-            _buildPopularVenueList(),
-            _buildSectionTitle('Explore Venue', () {}),
-            _buildExploreVenueCard(),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications, color: Colors.white),
+              onPressed: () {},
+            )
           ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSearchBar(),
+              _buildOfferBanner(),
+              _buildSectionTitle('Popular Venue', () {}),
+              _buildPopularVenueList(),
+              _buildSectionTitle('Explore Venue', () {}),
+              _buildExploreVenueCard(),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // Search Bar Widget
   Widget _buildSearchBar() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: TextField(
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          hintText: 'Search Venue',
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(vertical: 10),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            borderSide: BorderSide.none,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 8,
+              spreadRadius: 2,
+              offset: const Offset(0, 2), // Shadow position
+            ),
+          ],
+        ),
+        child: TextField(
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.search, color: Colors.grey),
+            hintText: 'Search Venue',
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              borderSide: BorderSide.none,
+            ),
           ),
-          suffixIcon: const Icon(Icons.settings, color: Colors.grey),
         ),
       ),
     );
@@ -105,7 +118,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             Image.asset(
-              'assets/images/bihe.png',
+              'assets/images/bride2.png',
               width: 80,
               height: 80,
               fit: BoxFit.cover,
@@ -147,12 +160,17 @@ class HomeScreen extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: const [
           VenueCard(
-            imagePath: 'assets/images/bihe.png',
+            imagePath: 'assets/images/popular.png',
             title: 'Durbar Party Palace',
             details: 'Seat Capacity: 600 people\nVenue Type: Party Palace',
           ),
           VenueCard(
-            imagePath: 'assets/images/bihe.png',
+            imagePath: 'assets/images/explore.png',
+            title: 'Sikh Party Palace',
+            details: 'Seat Capacity: 800 people\nVenue Type: Party Palace',
+          ),
+          VenueCard(
+            imagePath: 'assets/images/explore.png',
             title: 'Sikh Party Palace',
             details: 'Seat Capacity: 800 people\nVenue Type: Party Palace',
           ),
@@ -183,7 +201,7 @@ class HomeScreen extends StatelessWidget {
         child: Row(
           children: [
             Image.asset(
-              'assets/images/bihe.png',
+              'assets/images/explore.png',
               width: 120,
               height: 120,
               fit: BoxFit.cover,
