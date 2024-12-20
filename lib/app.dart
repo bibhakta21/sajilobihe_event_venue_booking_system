@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sajilobihe_event_venue_booking_system/core/app_theme/app_theme.dart';
 import 'package:sajilobihe_event_venue_booking_system/view/splashscreen_view.dart';
 
 class MyApp extends StatelessWidget {
@@ -8,7 +9,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Dashboard',
-      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "Roboto Bold"),
+      debugShowCheckedModeBanner: false,
+      theme: getApplicationTheme(),
       home: const SplashscreenView(),
     );
   }
