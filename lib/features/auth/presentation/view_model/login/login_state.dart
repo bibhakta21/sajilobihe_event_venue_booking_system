@@ -4,7 +4,7 @@ class LoginState {
   final bool isLoading;
   final bool isSuccess;
 
-  LoginState({
+  const LoginState({
     required this.isLoading,
     required this.isSuccess,
   });

@@ -1,163 +1,224 @@
-import 'package:sajilobihe_event_venue_booking_system/features/auth/presentation/view/login_view.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sajilobihe_event_venue_booking_system/app/constants/color_constants.dart';
+import 'package:sajilobihe_event_venue_booking_system/core/common/widgets/custom_elevated_button.dart';
+import 'package:sajilobihe_event_venue_booking_system/core/common/widgets/custom_text_field.dart';
+import 'package:sajilobihe_event_venue_booking_system/features/auth/presentation/view_model/signup/register_bloc.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _RegisterPageState extends State<RegisterView> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
-  bool _acceptTerms = false;
+class _RegisterViewState extends State<RegisterView> {
+  final _registerViewFormKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  File? _img;
 
-  @override
-  void initState() {
-    super.initState();
-    Hive.initFlutter(); // Ensure Hive is initialized
+  checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
   }
 
-  void _saveUserData() async {
-    if (!_acceptTerms) {
-      _showErrorSnackBar("Please accept terms and conditions.");
-      return;
-    }
-
-    if (passwordController.text != confirmPasswordController.text) {
-      _showErrorSnackBar("Passwords do not match.");
-      return;
-    }
-
-    var userBox = await Hive.openBox('users');
-
-    userBox.put(emailController.text, {
-      "name": nameController.text,
-      "email": emailController.text,
-      "password": passwordController.text,
-    });
-
-    _showSuccessSnackBar(context);
-  }
-
-  void _showSuccessSnackBar(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Registered successfully!', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 3),
-      ),
-    );
-
-    Future.delayed(const Duration(seconds: 3), () {
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
+  Future _browseImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _img = File(image.path);
+          context.read<RegisterBloc>().add(
+            LoadImage(file: _img!),
+          );
+        });
       }
-    });
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message, style: const TextStyle(color: Colors.white)),
-        backgroundColor: Colors.red,
-      ),
-    );
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Form(
-              key: _formKey,
+    return Form(
+      key: _registerViewFormKey,
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/logo.png', height: 150),
-                  const SizedBox(height: 24),
-                  const Text("Get Started", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  const Text("by creating a free account.", style: TextStyle(fontSize: 16, color: Colors.grey)),
-                  const SizedBox(height: 32),
-                  _buildTextField(label: 'Full name', controller: nameController, icon: Icons.person),
-                  const SizedBox(height: 16),
-                  _buildTextField(label: 'Valid email', controller: emailController, icon: Icons.email),
-                  const SizedBox(height: 16),
-                  _buildTextField(label: 'Password', controller: passwordController, icon: Icons.lock, isPassword: true),
-                  const SizedBox(height: 16),
-                  _buildTextField(label: 'Confirm Password', controller: confirmPasswordController, icon: Icons.lock, isPassword: true),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: _acceptTerms,
-                        onChanged: (value) {
-                          setState(() {
-                            _acceptTerms = value!;
-                          });
-                        },
-                      ),
-                      Expanded(
-                        child: RichText(
-                          text: const TextSpan(
-                            text: 'By checking the box you agree to our ',
-                            style: TextStyle(color: Colors.grey, fontSize: 14),
-                            children: [
-                              TextSpan(
-                                text: 'Terms and Conditions.',
-                                style: TextStyle(
-                                  color: Colors.redAccent,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: _saveUserData,
-                      child: const Text("Register", style: TextStyle(fontSize: 18, color: Colors.white)),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      height: 160,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Already a member? "),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const LoginPage()),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Get Started',
+                    style: TextStyle(
+                      fontSize: 28.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  const Text(
+                    'By creating a free account.',
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Stack(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              backgroundColor: Colors.grey[300],
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(10),
+                                ),
+                              ),
+                              builder: (context) => Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        checkCameraPermission();
+                                        _browseImage(ImageSource.camera);
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(Icons.camera),
+                                      label: const Text('Camera'),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        _browseImage(ImageSource.gallery);
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(Icons.image),
+                                      label: const Text('Gallery'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 150,
+                            width: 150,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[200],
+                            ),
+                            child: _img != null
+                                ? CircleAvatar(
+                              backgroundImage: FileImage(_img!),
+                              radius: 75,
+                            )
+                                : const CircleAvatar(
+                              radius: 75,
+                              child: Icon(
+                                Icons.person,
+                                size: 60,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  CustomTextField(
+                    controller: _nameController,
+                    validator: ValidateLogin.fullNameValidate,
+                    keyboardType: TextInputType.name,
+                    hintText: 'Enter your fullname',
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    controller: _emailController,
+                    validator: ValidateLogin.emailValidate,
+                    keyboardType: TextInputType.emailAddress,
+                    hintText: 'Enter your email',
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    controller: _passwordController,
+                    validator: ValidateLogin.passwordValidate,
+                    keyboardType: TextInputType.visiblePassword,
+                    hintText: 'Secured Password',
+                  ),
+                  const SizedBox(height: 20),
+                  CustomElevatedButton(
+                    text: "Sign Up",
+                    onPressed: () {
+                      if (_registerViewFormKey.currentState!.validate()) {
+                        if (_img == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please select a profile picture'),
+                            ),
                           );
-                        },
-                        child: const Text("Log In", style: TextStyle(color: Colors.redAccent)),
+                          return;
+                        }
+                        final registerState = context.read<RegisterBloc>().state;
+                        final imageName = registerState.imageName;
+                        context.read<RegisterBloc>().add(
+                          RegisterUserEvent(
+                            context: context,
+                            fullName: _nameController.text.trim(),
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                            avatar: imageName,
+                          ),
+                        );
+                        // Clear fields after successful registration
+                        _nameController.clear();
+                        _emailController.clear();
+                        _passwordController.clear();
+                        setState(() {
+                          _img = null;
+                        });
+                      }
+                    },
+                    width: double.infinity,
+                    textColor: Colors.white,
+                    verticalPadding: 18.0,
+                    fontSize: 18.0,
+                  ),
+                  const SizedBox(height: 30),
+                  Align(
+                    alignment: Alignment.center,
+                    child: InkWell(
+                      onTap: () {},
+                      child: const Text(
+                        "Already a member? Log in",
+                        style: TextStyle(fontSize: 15.0, color: Colors.red),
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -167,35 +228,32 @@ class _RegisterPageState extends State<RegisterView> {
       ),
     );
   }
+}
+class ValidateLogin {
+  static String? fullNameValidate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Full name is required';
+    }
+    if (value.length < 3) {
+      return 'Full name must be at least 3 characters long';
+    }
+    if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(value)) {
+      return 'Full name can only contain letters and spaces';
+    }
+    return null;
+  }
 
-  Widget _buildTextField({
-    required String label,
-    required TextEditingController controller,
-    required IconData icon,
-    bool isPassword = false,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, color: Colors.black),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your $label';
-        }
-        if (label == 'Valid email' && !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-          return 'Please enter a valid email address';
-        }
-        if (label == 'Password' && value.length < 6) {
-          return 'Password must be at least 6 characters';
-        }
-        return null;
-      },
-    );
+  static String? emailValidate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+    return null;
+  }
+
+  static String? passwordValidate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password is required';
+    }
+    return null;
   }
 }
