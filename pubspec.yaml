@@ -34,10 +34,15 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  pretty_dio_logger: ^1.4.0
+  icons_plus: ^5.0.0
+  emojis: ^0.9.9
+  smooth_page_indicator: ^1.2.0+3
   flutter_bloc: ^9.0.0 # For Cubit/BLoC state management
   get_it: ^8.0.3
   shared_preferences: ^2.3.5
-  hive: ^2.0.0        # For local database
+  dio: ^5.7.0
+  hive: ^2.0.0 # For local database
   hive_flutter: ^1.1.0 # For integrating Hive with Flutter
   dartz: ^0.10.1
   bloc: ^9.0.0
@@ -49,14 +54,16 @@ dependencies:
   permission_handler: ^11.3.1
   image_picker: ^1.1.2
   mocktail: ^1.0.4
+  test_cov_console: ^0.2.2
   bloc_test: ^10.0.0
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.2.0 # For generating Hive adapters
+  json_serializable: ^6.7.1
   hive_generator: ^2.0.1 # For generating Hive type adapters
-  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
