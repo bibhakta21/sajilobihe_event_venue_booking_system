@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sajilobihe_event_venue_booking_system/app/constants/color_constants.dart';
 import 'package:sajilobihe_event_venue_booking_system/core/common/widgets/custom_elevated_button.dart';
 import 'package:sajilobihe_event_venue_booking_system/core/common/widgets/custom_text_field.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/auth/presentation/view/register_view.dart';
@@ -22,7 +21,7 @@ class LoginView extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Form(
-              key: _loginFormKey,  // Wrap the form with the form key
+              key: _loginFormKey, // Wrap the form with the form key
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -54,7 +53,8 @@ class LoginView extends StatelessWidget {
                   // Email TextField
                   CustomTextField(
                     controller: _emailController,
-                    validator: ValidateLogin.emailValidate, // Add validator here
+                    validator:
+                        ValidateLogin.emailValidate, // Add validator here
                     keyboardType: TextInputType.emailAddress,
                     hintText: 'Enter your email',
                   ),
@@ -63,7 +63,8 @@ class LoginView extends StatelessWidget {
                   // Password TextField
                   CustomTextField(
                     controller: _passwordController,
-                    validator: ValidateLogin.passwordValidate, // Add validator here
+                    validator:
+                        ValidateLogin.passwordValidate, // Add validator here
                     keyboardType: TextInputType.visiblePassword,
                     hintText: 'Password',
                   ),
@@ -74,8 +75,7 @@ class LoginView extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .pushNamed("/forget-password");
+                        Navigator.of(context).pushNamed("/forget-password");
                       },
                       child: const Text(
                         "Forgot password?",
@@ -94,12 +94,12 @@ class LoginView extends StatelessWidget {
                         if (_loginFormKey.currentState!.validate()) {
                           // Proceed with login if the form is valid
                           context.read<LoginBloc>().add(
-                            LoginUserEvent(
-                              context: context,
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                            ),
-                          );
+                                LoginUserEvent(
+                                  context: context,
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                ),
+                              );
                         }
                       },
                       width: double.infinity,
@@ -118,11 +118,11 @@ class LoginView extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           context.read<LoginBloc>().add(
-                            NavigateRegisterScreenEvent(
-                              context: context,
-                              destination: const RegisterView(),
-                            ),
-                          );
+                                NavigateRegisterScreenEvent(
+                                  context: context,
+                                  destination: const RegisterView(),
+                                ),
+                              );
                         },
                         child: const Text(
                           "Register now",
