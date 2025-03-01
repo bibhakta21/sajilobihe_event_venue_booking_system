@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sajilobihe_event_venue_booking_system/core/common/snackbar/my_snackbar.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/auth/domain/use_case/create_user_usecase.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/auth/domain/use_case/upload_image_usecase.dart';
-
+import './register_state.dart';
 part 'register_event.dart';
-part 'register_state.dart';
+
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final CreateUserUsecase _createUserUsecase;
@@ -22,7 +22,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         super(RegisterState.initial()) {
     on<RegisterUserEvent>(_onRegisterUserEvent);
     on<LoadImage>(_onLoadImage);
+
+
+
+    
   }
+
+
 
   Future<void> _onRegisterUserEvent(
       RegisterUserEvent event, Emitter<RegisterState> emit) async {
@@ -66,18 +72,4 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       },
     );
   }
-
-// // Handle NavigateLoginScreenEvent
-//   Future<void> _onNavigateLoginScreenEvent(
-//       NavigateLoginScreenEvent event, Emitter<RegisterState> emit) async {
-//     Navigator.push(
-//       event.context,
-//       MaterialPageRoute(
-//         builder: (context) => BlocProvider.value(
-//           value: _loginBloc,
-//           child: event.destination,
-//         ),
-//       ),
-//     );
-//   }
 }
