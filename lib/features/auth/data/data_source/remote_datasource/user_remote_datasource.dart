@@ -38,22 +38,22 @@ class UserRemoteDataSource implements IUserDataSource {
     throw UnimplementedError();
   }
 
-  @override
-  Future<List<UserEntity>> getAllUsers() async {
-    try {
-      var response = await _dio.get(ApiEndpoints.getAllUsers);
-      if (response.statusCode == 200) {
-        GetAllUserDTO userAddDTO = GetAllUserDTO.fromJson(response.data);
-        return UserApiModel.toEntityList(userAddDTO.data);
-      } else {
-        throw Exception(response.statusMessage);
-      }
-    } on DioException catch (e) {
-      throw Exception(e);
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+  // @override
+  // Future<List<UserEntity>> getAllUsers() async {
+  //   try {
+  //     var response = await _dio.get(ApiEndpoints.getAllUsers);
+  //     if (response.statusCode == 200) {
+  //       GetAllUserDTO userAddDTO = GetAllUserDTO.fromJson(response.data);
+  //       return UserApiModel.toEntityList(userAddDTO.data);
+  //     } else {
+  //       throw Exception(response.statusMessage);
+  //     }
+  //   } on DioException catch (e) {
+  //     throw Exception(e);
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  // }
 
   @override
   Future<String> loginUser(String email, String password) async {
@@ -65,9 +65,8 @@ class UserRemoteDataSource implements IUserDataSource {
           'password': password,
         },
       );
-
       if (response.statusCode == 200) {
-        final token = response.data['user']['token'] as String;
+        final token = response.data['token'] as String;
         return token;
       } else {
         throw Exception(response.statusMessage);
@@ -83,18 +82,20 @@ class UserRemoteDataSource implements IUserDataSource {
   Future<String> uploadProfilePicture(File file) async {
     try {
       String fileName = file.path.split('/').last;
-      FormData formData = FormData.fromMap(
-        {
-          'avatar': await MultipartFile.fromFile(
-            file.path,
-            filename: fileName,
-          ),
-        },
-      );
+      FormData formData = FormData.fromMap({
+        'avatar': await MultipartFile.fromFile(
+          file.path,
+          filename: fileName,
+        ),
+      });
 
       Response response = await _dio.post(
         ApiEndpoints.uploadImage,
         data: formData,
+        options: Options(
+          contentType:
+              'multipart/form-data', // <-- Specify multipart/form-data here
+        ),
       );
 
       if (response.statusCode == 200) {
@@ -108,4 +109,38 @@ class UserRemoteDataSource implements IUserDataSource {
       throw Exception(e);
     }
   }
+
+
+  // New method: Get current user profile using the token.
+  @override
+  Future<UserEntity> getProfile(String token) async {
+    try {
+      Response response = await _dio.get(
+        ApiEndpoints.profile,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        // Convert response JSON to UserApiModel and then to UserEntity.
+        UserApiModel userApiModel = UserApiModel.fromJson(response.data);
+        return userApiModel.toEntity();
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+  
+  @override
+  Future<List<UserEntity>> getAllUsers() {
+    // TODO: implement getAllUsers
+    throw UnimplementedError();
+  }
+
 }

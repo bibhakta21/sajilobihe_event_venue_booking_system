@@ -8,4 +8,5 @@ abstract interface class IUserDataSource {
   Future<List<UserEntity>> getAllUsers();
   Future<void> deleteUser(String id);
   Future<String> uploadProfilePicture(File file);
+  Future<UserEntity> getProfile(String token);
 }

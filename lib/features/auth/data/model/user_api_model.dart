@@ -53,7 +53,7 @@ class UserApiModel extends Equatable {
   // To JSON
   Map<String, dynamic> toJson() {
     return {
-      'name': fullName,
+      'username': fullName,
       'email': email,
       'password': password,
       'phone': phone,
