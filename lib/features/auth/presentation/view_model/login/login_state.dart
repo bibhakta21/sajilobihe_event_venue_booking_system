@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import './login_bloc.dart';
 
 class LoginState extends Equatable {
   final bool isLoading;
@@ -28,6 +27,6 @@ class LoginState extends Equatable {
   }
 
   @override
-  List<Object> get props => [isLoading, isSuccess]; // ✅ Enables proper state comparison
+  List<Object> get props =>
+      [isLoading, isSuccess]; // ✅ Enables proper state comparison
 }
-

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:sajilobihe_event_venue_booking_system/app/constants/api_endpoints.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/auth/data/data_source/user_data_source.dart';
-import 'package:sajilobihe_event_venue_booking_system/features/auth/data/dto/get_all_user_dto.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/auth/data/model/user_api_model.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/auth/domain/entity/user_entity.dart';
 
@@ -110,7 +109,6 @@ class UserRemoteDataSource implements IUserDataSource {
     }
   }
 
-
   // New method: Get current user profile using the token.
   @override
   Future<UserEntity> getProfile(String token) async {
@@ -136,11 +134,10 @@ class UserRemoteDataSource implements IUserDataSource {
       throw Exception(e.toString());
     }
   }
-  
+
   @override
   Future<List<UserEntity>> getAllUsers() {
     // TODO: implement getAllUsers
     throw UnimplementedError();
   }
-
 }

@@ -74,13 +74,14 @@ class UserRemoteRepository implements IUserRepository {
   }
 
   // New method: get profile data
-   @override
   Future<Either<Failure, UserEntity>> getProfile(String token) async {
     try {
       final user = await _userRemoteDatasource.getProfile(token);
       return Right(user);
     } catch (e) {
-      return Left(ApiFailure(message: "Failed to fetch user profile: ${e.toString()}", statusCode: 400));
+      return Left(ApiFailure(
+          message: "Failed to fetch user profile: ${e.toString()}",
+          statusCode: 400));
     }
   }
 }
