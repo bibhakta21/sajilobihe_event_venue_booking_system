@@ -10,7 +10,7 @@ import 'package:sajilobihe_event_venue_booking_system/features/venue/presentatio
 import 'package:sajilobihe_event_venue_booking_system/features/venue/presentation/view_model/admin/venue_event.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/venue/presentation/view_model/admin/venue_state.dart';
 
-/// ✅ **Mock Dependencies**
+/// *Mock Dependencies**
 class MockGetAllVenuesUseCase extends Mock implements GetAllVenuesUseCase {}
 class MockAddVenueUseCase extends Mock implements AddVenueUseCase {}
 class MockUpdateVenueUseCase extends Mock implements UpdateVenueUseCase {}

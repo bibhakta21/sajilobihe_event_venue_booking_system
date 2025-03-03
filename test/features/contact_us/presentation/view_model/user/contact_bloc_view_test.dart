@@ -1,3 +1,4 @@
+// 5 bloc test
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -7,25 +8,25 @@ import 'package:sajilobihe_event_venue_booking_system/features/contact_us/presen
 import 'package:sajilobihe_event_venue_booking_system/features/contact_us/presentation/view_model/user/contact_event.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/contact_us/presentation/view_model/user/contact_state.dart';
 
-/// Mock Dependencies
+///  **Mock Dependencies**
 class MockSubmitContactUseCase extends Mock implements SubmitContactUseCase {}
 
 void main() {
   late ContactBlocView contactBloc;
   late MockSubmitContactUseCase mockSubmitContactUseCase;
 
-  /// ✅ **Set up test dependencies**
+  ///  **Set up test dependencies**
   setUp(() {
     mockSubmitContactUseCase = MockSubmitContactUseCase();
     contactBloc = ContactBlocView(mockSubmitContactUseCase);
   });
 
-  /// Close the bloc after tests**
+  /// **Close the bloc after tests**
   tearDown(() {
     contactBloc.close();
   });
 
-  ///Fake ContactEntity for testing**
+  /// **Fake ContactEntity for testing**
   final testContact = ContactEntity(
     id: "1",
     name: "Test User",
@@ -39,7 +40,7 @@ void main() {
     expect(contactBloc.state, isA<ContactInitialState>());
   });
 
-  ///  Successful contact submission**
+  ///Successful contact submission**
   blocTest<ContactBlocView, ContactState>(
     'should emit [ContactLoadingState, ContactSuccessState] when contact form is submitted successfully',
     build: () {
@@ -68,11 +69,15 @@ void main() {
     act: (bloc) => bloc.add(SubmitContactEvent(testContact)),
     expect: () => [
       isA<ContactLoadingState>(),
-      isA<ContactErrorState>(),
+      isA<ContactErrorState>().having(
+        (state) => state.message,
+        'error message',
+        "Failed to submit contact form",
+      ),
     ],
   );
 
-  ///  Contact submission throws an exception**
+  /// Contact submission throws an exception**
   blocTest<ContactBlocView, ContactState>(
     'should emit [ContactLoadingState, ContactErrorState] when an exception occurs',
     build: () {
@@ -83,12 +88,43 @@ void main() {
     act: (bloc) => bloc.add(SubmitContactEvent(testContact)),
     expect: () => [
       isA<ContactLoadingState>(),
-      isA<ContactErrorState>(),
+      isA<ContactErrorState>().having(
+        (state) => state.message,
+        'error message',
+        "An error occurred",
+      ),
     ],
   );
 
-  test("should remain in ContactInitialState when no event is added", () {
-  expect(contactBloc.state, isA<ContactInitialState>());
-});
+  /// Multiple consecutive submissions**
+  blocTest<ContactBlocView, ContactState>(
+    'should emit states correctly when multiple contact form submissions happen consecutively',
+    build: () {
+      when(() => mockSubmitContactUseCase(testContact))
+          .thenAnswer((_) async => true);
+      return contactBloc;
+    },
+    act: (bloc) {
+      bloc.add(SubmitContactEvent(testContact));
+      bloc.add(SubmitContactEvent(testContact));
+    },
+    expect: () => [
+      isA<ContactLoadingState>(),
+      isA<ContactSuccessState>(),
+      isA<ContactLoadingState>(),
+      isA<ContactSuccessState>(),
+    ],
+    verify: (_) {
+      verify(() => mockSubmitContactUseCase(testContact)).called(2);
+    },
+  );
+
+    /// No state change when an empty contact entity is submitted**
+blocTest<ContactBlocView, ContactState>(
+  'should emit [] (no state change) when no event is added',
+  build: () => contactBloc,
+  expect: () => [],
+);
+
 
 }
