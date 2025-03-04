@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/contact_us/domain/entity/contact_entity.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/contact_us/presentation/view_model/user/contact_bloc_view.dart';
 import 'package:sajilobihe_event_venue_booking_system/features/contact_us/presentation/view_model/user/contact_event.dart';
-import 'package:sajilobihe_event_venue_booking_system/features/contact_us/presentation/view_model/user/contact_state.dart';
+
+import '../view_model/user/contact_state.dart';
+
 
 class ContactView extends StatefulWidget {
   const ContactView({super.key});
@@ -27,9 +29,27 @@ class _ContactViewState extends State<ContactView> {
     messageController.clear();
   }
 
+  void _showSnackbar(String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5), // Light grey background
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
         elevation: 0,
@@ -38,35 +58,27 @@ class _ContactViewState extends State<ContactView> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Company Information Section
               _buildCompanyInfo(),
-
               const SizedBox(height: 20),
-
-              // Contact Form Section
               BlocConsumer<ContactBlocView, ContactState>(
                 listener: (context, state) {
                   if (state is ContactSuccessState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Message sent successfully!"),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
+                    _showSnackbar("Message sent successfully!", Colors.green);
                     _clearFields();
                   } else if (state is ContactErrorState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
+                    _showSnackbar(state.message, Colors.red);
                   }
                 },
                 builder: (context, state) {
@@ -80,41 +92,33 @@ class _ContactViewState extends State<ContactView> {
     );
   }
 
-  /// ✅ **Company Information Widget**
+  /// Company Information Widget**
   Widget _buildCompanyInfo() {
     return Card(
-      elevation: 6,
+      color: Colors.white,
+      elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            // Company Logo
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset("assets/images/logo.png", height: 100),
+              child: Image.asset("assets/images/logo.png", height: 90),
             ),
-            const SizedBox(height: 12),
-
-            // Company Name
+            const SizedBox(height: 10),
             const Text(
               "Sajilo Bihe Event Venue Booking",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 10),
-
-            // Company Description
+            const SizedBox(height: 8),
             const Text(
-              "We provide the best venues for your events, weddings, and celebrations. Book with us for a hassle-free and memorable experience.",
+              "Find the perfect venue for your events. We provide hassle-free venue booking services for weddings, parties, and corporate events.",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
-            const SizedBox(height: 12),
-
-            // Contact Details
-            const Divider(),
-
+            const SizedBox(height: 15),
             _buildContactDetail(Icons.phone, "+977 9800000000"),
             _buildContactDetail(Icons.email, "info@sajilobihe.com"),
             _buildContactDetail(Icons.location_on, "Kathmandu, Nepal"),
@@ -124,13 +128,20 @@ class _ContactViewState extends State<ContactView> {
     );
   }
 
-  /// ✅ **Contact Detail Row Widget**
+  /// Contact Detail Row Widget**
   Widget _buildContactDetail(IconData icon, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Icon(icon, color: Colors.redAccent),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.redAccent.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: Colors.redAccent),
+          ),
           const SizedBox(width: 12),
           Text(text, style: const TextStyle(fontSize: 16)),
         ],
@@ -138,9 +149,10 @@ class _ContactViewState extends State<ContactView> {
     );
   }
 
-  /// ✅ **Contact Form Widget**
+  /// Contact Form Widget**
   Widget _buildContactForm(ContactState state) {
     return Card(
+      color: Colors.white,
       elevation: 6,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
@@ -154,47 +166,43 @@ class _ContactViewState extends State<ContactView> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-
               _buildTextField("Full Name", nameController, Icons.person),
               _buildTextField("Email", emailController, Icons.email),
               _buildTextField("Phone", phoneController, Icons.phone),
               _buildTextField("Your Message", messageController, Icons.message,
                   maxLines: 4),
-
               const SizedBox(height: 20),
-
-              // Submit Button with Gradient
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 30),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final contact = ContactEntity(
+                        name: nameController.text,
+                        email: emailController.text,
+                        phone: phoneController.text,
+                        message: messageController.text,
+                        id: '',
+                      );
+                      context.read<ContactBlocView>().add(SubmitContactEvent(contact));
+                    }
+                  },
+                  child: state is ContactLoadingState
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
+                          "Submit",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
                 ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final contact = ContactEntity(
-                      name: nameController.text,
-                      email: emailController.text,
-                      phone: phoneController.text,
-                      message: messageController.text,
-                      id: '',
-                    );
-                    context
-                        .read<ContactBlocView>()
-                        .add(SubmitContactEvent(contact));
-                  }
-                },
-                child: state is ContactLoadingState
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        "Submit",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
               ),
             ],
           ),
@@ -203,7 +211,7 @@ class _ContactViewState extends State<ContactView> {
     );
   }
 
-  /// ✅ **Reusable TextField Widget with Icons & Validation**
+  ///Reusable TextField Widget**
   Widget _buildTextField(
       String label, TextEditingController controller, IconData icon,
       {int maxLines = 1}) {
@@ -222,12 +230,6 @@ class _ContactViewState extends State<ContactView> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
-          ),
         ),
       ),
     );
