@@ -23,7 +23,7 @@ Built with **Flutter & Dart**, this app follows **Clean Architecture** and the *
 
 - 🔐 **Login & Register** – Secure authentication for users.
 - 🏠 **Homepage** – Browse the best event venues.
-- 🔍 **Search & Filter** – Find venues based on location, price, and availability.
+- 🔍 **Search** – Search venue.
 - 📅 **Book Appointments** – Easily schedule event bookings.
 - 📩 **Send Contact Messages** – Directly reach out for inquiries.
 - 🛠 **Customize Profile** – Edit personal details and preferences.
@@ -32,70 +32,87 @@ Built with **Flutter & Dart**, this app follows **Clean Architecture** and the *
 
 ### 🔑 **For Admin**
 
-- 🎛️ **Admin Dashboard** – Track business performance with insights.
+- 🎛️ **Admin Dashboard** – Detail feature info.
 - ➕ **Add Venue** – Seamlessly upload new venue listings.
 - 🏛️ **Manage Venues** – Edit or remove venue details.
 - 📦 **Manage Orders** – View, approve, or cancel user bookings.
-- 📩 **Manage Contact Requests** – View and respond to inquiries.
+- 📩 **Manage Contact Requests** – View and delete inquiries.
 
 ---
 
 ## 📸 App Screenshots
 
 ### 🏠 Splash Screen
-<img src="app_screenshots/1.png" width="400">
+
+<img src="app_screenshots/1.png" width="300">
 
 ### 🚀 Onboarding Screen
+
 <img src="app_screenshots/2.png" width="400">
 
 ### 🔐 Login Screen
-<img src="app_screenshots/3.png" width="400">
+
+<img src="app_screenshots/3.png" width="300">
 
 ### 📝 Registration Screen
-<img src="app_screenshots/4.png" width="400">
+
+<img src="app_screenshots/4.png" width="300">
 
 ### 🏠 Home Page
+
 <img src="app_screenshots/5.png" width="400">
 
 ### 🏛️ Venue Screen
-<img src="app_screenshots/6.png" width="400">
+
+<img src="app_screenshots/6.png" width="300">
 
 ### 📖 Venue Detail Page
-<img src="app_screenshots/7.png" width="400">
+
+<img src="app_screenshots/7.png" width="300">
 
 ### 📅 Booking Display Screen
-<img src="app_screenshots/8.png" width="400">
+
+<img src="app_screenshots/8.png" width="300">
 
 ### 📩 Contact Screen
+
 <img src="app_screenshots/9.png" width="400">
 
 ### 🛠 Profile Screen
-<img src="app_screenshots/10.png" width="400">
+
+<img src="app_screenshots/10.png" width="300">
 
 ### ℹ️ About Us
-<img src="app_screenshots/11.png" width="400">
+
+<img src="app_screenshots/11.png" width="300">
 
 ### 📜 Terms and Conditions
-<img src="app_screenshots/12.png" width="400">
+
+<img src="app_screenshots/12.png" width="300">
 
 ### 🎛️ Admin Dashboard
-<img src="app_screenshots/13.png" width="400">
+
+<img src="app_screenshots/13.png" width="300">
 
 ### ➕ Add Venue
-<img src="app_screenshots/15.png" width="400">
+
+<img src="app_screenshots/15.png" width="300">
 
 ### 🏛️ Manage Venue
-<img src="app_screenshots/16.png" width="400">
+
+<img src="app_screenshots/16.png" width="300">
 
 ### 📩 Manage Contact
-<img src="app_screenshots/17.png" width="400">
+
+<img src="app_screenshots/17.png" width="300">
 
 ### 🚫 Manage Booking
-<img src="app_screenshots/18.png" width="400">
+
+<img src="app_screenshots/18.png" width="300">
 
 ### 🏆 Admin Drawer
-<img src="app_screenshots/14.png" width="400">
 
+<img src="app_screenshots/14.png" width="300">
 
 ---
 
