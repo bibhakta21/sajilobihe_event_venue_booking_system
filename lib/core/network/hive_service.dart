@@ -1,76 +1,124 @@
-import 'package:sajilobihe_event_venue_booking_system/app/constants/hive_table_constant.dart';
-import 'package:sajilobihe_event_venue_booking_system/features/auth/data/model/auth_hive_model.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sajilobihe_event_venue_booking_system/app/constants/hive_table_constant.dart';
+import 'package:sajilobihe_event_venue_booking_system/features/auth/data/model/user_hive_model.dart';
+import 'package:sajilobihe_event_venue_booking_system/features/booking/data/model/booking_hive_model.dart';
+import 'package:sajilobihe_event_venue_booking_system/features/contact_us/data/model/contact_hive_model.dart';
+import 'package:sajilobihe_event_venue_booking_system/features/venue/data/model/venue_hive_model.dart';
 
 class HiveService {
-  /// Initialize Hive and setup database directory
-  static Future<void> init() async {
-    // Get the application documents directory
+  Future<void> init() async {
+    // Initialize the database
     var directory = await getApplicationDocumentsDirectory();
-    var path = '${directory.path}sajilobihe.db';
+    var path = '${directory.path}sajilobihe_event_venue_booking_system.db';
 
-    // Initialize Hive with the specified path
     Hive.init(path);
 
-    // Register Hive adapters for custom data models
-    Hive.registerAdapter(AuthHiveModelAdapter());
+    // Register Adapters
+    Hive.registerAdapter(UserHiveModelAdapter());
   }
 
-  /// Register a new user and store their data in Hive
-  /// [auth] - The user's authentication details to store
-  Future<void> register(AuthHiveModel auth) async {
-    // Open the Hive box for user data
-    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
-    // Store the user's data using their userId as the key
-    await box.put(auth.userId, auth);
+  // User Queries
+  Future<void> addUser(UserHiveModel user) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    await box.put(user.userId, user);
   }
 
-  /// Delete a user from Hive by their ID
-  /// [id] - The ID of the user to delete
-  Future<void> deleteAuth(String id) async {
-    // Open the Hive box for user data
-    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
-    // Remove the user data with the specified ID
-    await box.delete(id);
+  Future<List<UserHiveModel>> getAllUsers() async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    var users = box.values.toList();
+    return users;
   }
 
-  /// Retrieve all users stored in Hive
-  /// Returns a list of all [AuthHiveModel] objects
-  Future<List<AuthHiveModel>> getAllAuth() async {
-    // Open the Hive box for user data
-    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
-    // Return all values as a list
-    return box.values.toList();
+  Future<void> deleteUser(String userId) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    await box.delete(userId);
   }
 
-  /// Authenticate a user by their email and password
-  /// [email] - The user's email
-  /// [password] - The user's password
-  /// Returns the [AuthHiveModel] if found, otherwise null
-  Future<AuthHiveModel?> login(String email, String password) async {
-    // Open the Hive box for user data
-    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
+  // Login using username and password
+  Future<UserHiveModel?> login(String email, String password) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    var user = box.values.firstWhere(
+        (element) => element.email == email && element.password == password);
+    box.close();
+    return user;
+  }
 
-    try {
-      // Find the first user matching the email and password
-      return box.values.firstWhere(
-            (element) => element.email == email && element.password == password,
-      );
-    } catch (e) {
-      // Return null if no matching user is found
-      return null;
+   Future<void> storeVenues(List<VenueHiveModel> venues) async {
+    var box = await Hive.openBox<VenueHiveModel>(HiveTableConstant.venueBox);
+    for (var venue in venues) {
+      await box.put(venue.id, venue);
     }
   }
 
-  /// Clear all user data from Hive
-  Future<void> clearAll() async {
-    // Delete the Hive box from disk
-    await Hive.deleteBoxFromDisk(HiveTableConstant.userBox);
+  Future<List<VenueHiveModel>> getStoredVenues() async {
+    var box = await Hive.openBox<VenueHiveModel>(HiveTableConstant.venueBox);
+    return box.values.toList();
   }
 
-  /// Close the Hive database connection
-  Future<void> close() async {
-    await Hive.close();
+  Future<void> clearVenues() async {
+    var box = await Hive.openBox<VenueHiveModel>(HiveTableConstant.venueBox);
+    await box.clear();
+  }
+
+  Future<void> addBooking(BookingHiveModel booking) async {
+    var box = await Hive.openBox<BookingHiveModel>(HiveTableConstant.bookingBox);
+    await box.put(booking.id, booking);
+  }
+
+  Future<List<BookingHiveModel>> getUserBookings(String userId) async {
+    var box = await Hive.openBox<BookingHiveModel>(HiveTableConstant.bookingBox);
+    return box.values.where((booking) => booking.userId == userId).toList();
+  }
+
+  Future<List<BookingHiveModel>> getAllBookings() async {
+    var box = await Hive.openBox<BookingHiveModel>(HiveTableConstant.bookingBox);
+    return box.values.toList();
+  }
+
+  Future<void> cancelBooking(String bookingId) async {
+    var box = await Hive.openBox<BookingHiveModel>(HiveTableConstant.bookingBox);
+    var booking = box.get(bookingId);
+    if (booking != null) {
+      var updatedBooking = BookingHiveModel(
+        id: booking.id,
+        userId: booking.userId,
+        venueId: booking.venueId,
+        bookingDate: booking.bookingDate,
+        status: "Cancelled", // Updating status
+        userName: booking.userName,
+        userEmail: booking.userEmail,
+        userPhone: booking.userPhone,
+        venueName: booking.venueName,
+        venueImages: booking.venueImages,
+        venuePrice: booking.venuePrice,
+        venueCapacity: booking.venueCapacity,
+      );
+      await box.put(bookingId, updatedBooking);
+    }
+  }
+
+  Future<void> deleteBooking(String bookingId) async {
+    var box = await Hive.openBox<BookingHiveModel>(HiveTableConstant.bookingBox);
+    await box.delete(bookingId);
+  }
+
+
+   Future<void> addContact(ContactHiveModel contact) async {
+    var box =
+        await Hive.openBox<ContactHiveModel>(HiveTableConstant.contactBox);
+    await box.put(contact.id, contact);
+  }
+
+  Future<List<ContactHiveModel>> getAllContacts() async {
+    var box =
+        await Hive.openBox<ContactHiveModel>(HiveTableConstant.contactBox);
+    return box.values.toList();
+  }
+
+  Future<void> deleteContact(String id) async {
+    var box =
+        await Hive.openBox<ContactHiveModel>(HiveTableConstant.contactBox);
+    await box.delete(id);
   }
 }
