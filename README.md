@@ -43,76 +43,59 @@ Built with **Flutter & Dart**, this app follows **Clean Architecture** and the *
 ## 📸 App Screenshots
 
 ### 🏠 Splash Screen
-
-![Splash Screen](app_screenshots/1.png)
+<img src="app_screenshots/1.png" width="400">
 
 ### 🚀 Onboarding Screen
-
-![Onboarding Screen](app_screenshots/2.png)
+<img src="app_screenshots/2.png" width="400">
 
 ### 🔐 Login Screen
-
-![Login Screen](app_screenshots/3.png)
+<img src="app_screenshots/3.png" width="400">
 
 ### 📝 Registration Screen
-
-![Registration Screen](app_screenshots/4.png)
+<img src="app_screenshots/4.png" width="400">
 
 ### 🏠 Home Page
-
-![Home Page](app_screenshots/5.png)
+<img src="app_screenshots/5.png" width="400">
 
 ### 🏛️ Venue Screen
-
-![Venue Screen](app_screenshots/6.png)
+<img src="app_screenshots/6.png" width="400">
 
 ### 📖 Venue Detail Page
-
-![Venue Detail Page](app_screenshots/7.png)
+<img src="app_screenshots/7.png" width="400">
 
 ### 📅 Booking Display Screen
-
-![Booking Display Screen](app_screenshots/8.png)
+<img src="app_screenshots/8.png" width="400">
 
 ### 📩 Contact Screen
-
-![Contact Screen](app_screenshots/9.png)
+<img src="app_screenshots/9.png" width="400">
 
 ### 🛠 Profile Screen
-
-![Profile Screen](app_screenshots/10.png)
+<img src="app_screenshots/10.png" width="400">
 
 ### ℹ️ About Us
-
-![About Us](app_screenshots/11.png)
+<img src="app_screenshots/11.png" width="400">
 
 ### 📜 Terms and Conditions
-
-![Terms and Conditions](app_screenshots/12.png)
+<img src="app_screenshots/12.png" width="400">
 
 ### 🎛️ Admin Dashboard
-
-![Admin Dashboard](app_screenshots/13.png)
+<img src="app_screenshots/13.png" width="400">
 
 ### ➕ Add Venue
-
-![Add Venue](app_screenshots/15.png)
+<img src="app_screenshots/15.png" width="400">
 
 ### 🏛️ Manage Venue
-
-![Manage Venue](app_screenshots/16.png)
+<img src="app_screenshots/16.png" width="400">
 
 ### 📩 Manage Contact
-
-![Manage Contact](app_screenshots/17.png)
+<img src="app_screenshots/17.png" width="400">
 
 ### 🚫 Manage Booking
-
-![Manage Booking](app_screenshots/18.png)
+<img src="app_screenshots/18.png" width="400">
 
 ### 🏆 Admin Drawer
+<img src="app_screenshots/14.png" width="400">
 
-![Admin Drawer](app_screenshots/14.png)
 
 ---
 
